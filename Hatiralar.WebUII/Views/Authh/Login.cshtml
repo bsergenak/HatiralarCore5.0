@@ -1,0 +1,84 @@
+﻿<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+
+    <title>Admin</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row main">
+            <div class="main-login main-center">
+                <form method="post" asp-action="Login" asp-controller="Auth">
+                    <div class="text-center" asp-validation-summary="ModelOnly"></div>
+                    <div class="form-group">
+                        <label for="email" class="cols-sm-2 control-label">Email</label>
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                                <input type="text" class="form-control" name="Email" id="Email" placeholder="Mail adresini gir" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="cols-sm-2 control-label">Password</label>
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                                <input type="password" class="form-control" name="Password" id="Password" placeholder="Enter your Password" />
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit">Giriş</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $("form").submit(function(event) {
+                var formData = {
+                    Email: $("#Email").val(),
+                    Password: $("#Password").val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:37551/Members/Login",
+                    data: formData,
+                    success: (response) => {
+                        if (response == "Kullanıcı adı veya parola hatalı") {
+                            alert("Kullanıcı Adı veya parolanız hatalı")
+                        }
+                        else {
+                            windows.localStorage.setItem("token", "Bearer" + response)
+                            windows.location.href = "/Home/Index"
+                        }
+                    },
+                    error: x => {
+                        alert("Sunucuya ulaşılamadı. Statü Kodu = " + x.status)
+                    }
+                })
+                event.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>

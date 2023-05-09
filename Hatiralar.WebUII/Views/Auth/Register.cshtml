@@ -1,0 +1,140 @@
+﻿<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<!DOCTYPE html>
+<html lang="en">
+    <head> 
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+		<link rel="stylesheet" href="style.css">
+		<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+
+		<title>Admin</title>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row main">
+				<div class="main-login main-center">
+					<form id="form-data">
+						<div class="text-center" asp-validation-summary="ModelOnly"></div>
+						<div class="form-group">
+							<label for="name" class="cols-sm-2 control-label">Ad</label>
+							<div class="cols-sm-10">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+									<input type="text" class="form-control" name="FirstName" id="FirstName"  placeholder="Enter your Name"/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="cols-sm-2 control-label">Soyad</label>
+							<div class="cols-sm-10">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+									<input type="text" class="form-control" name="LastName" id="LastName"  placeholder="Enter your Name"/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="cols-sm-2 control-label">Telefon Numarası</label>
+							<div class="cols-sm-10">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+									<input type="text" class="form-control" name="PhoneNumber" id="PhoneNumber"  placeholder="Enter your Name"/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="email" class="cols-sm-2 control-label">Email</label>
+							<div class="cols-sm-10">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+									<input type="text" class="form-control" name="Email" id="Email"  placeholder="Mail adresini gir"/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="username" class="cols-sm-2 control-label">Username</label>
+							<div class="cols-sm-10">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+									<input type="text" class="form-control" name="UserName" id="UserName"  placeholder="Kullanıcı adını giriniz"/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="password" class="cols-sm-2 control-label">Password</label>
+							<div class="cols-sm-10">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+									<input type="password" class="form-control" name="Password" id="Password"  placeholder="Enter your Password"/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="confirm" class="cols-sm-2 control-label">Confirm Password</label>
+							<div class="cols-sm-10">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+									<input type="password" class="form-control" name="ConfirmPassword" id="ConfirmPassword"  placeholder="Confirm your Password"/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group ">
+							<button type="submit">Uye Ol</button>
+						</div>
+						
+					</form>
+				</div>
+			</div>
+		</div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+	<script>
+$(document).ready(function() {
+	 
+    $("#form-data").submit(function(event) { 
+		
+        var formData = {
+            FirstName: $("#FirstName").val(),
+            LastName: $("#LastName").val(),
+            PhoneNumber: $("#PhoneNumber").val(),
+            Email: $("#Email").val(),
+            UserName: $("#UserName").val(),
+            Password: $("#Password").val(),
+            ConfirmPassword : $("#ConfirmPassword").val()
+		};
+        $.ajax(
+            {
+                type: "POST",
+                url: "http://localhost:37551/api/Members/Register", //APİ YOLU
+                data: formData,
+                success: (response) => {
+                    if (response == "200") {
+						
+                        alert("Kullanıcı oluşturuldu")
+						window.location.href="/Auth/Login"
+                    }
+                    else {
+                        var errors = ""
+                        response.each(x => errors += x)
+                        $("#btn").append(`<div>${errors}</div>`)
+                    }
+                },
+                error: x => {
+                    alert("Sunucuya erişilemiyor" + x.status)
+                }
+            });
+       event.preventDefault();
+
+	})
+});
+	</script>
+	</body>
+</html>

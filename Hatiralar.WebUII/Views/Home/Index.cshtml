@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+    <div id="login">
+
+    </div>
+    <h1>Burası Anasayfa</h1>
+
+    <h1>Burası Şehirler</h1>
+    <table class="table table-active">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Created Date</th>
+            </tr>
+        </thead>
+        <tbody id="cities">
+
+        </tbody>
+    </table>
+</body>
+</html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+<script>
+function getCities() {
+  const citiesElement = $("#cities")
+    $.ajax({
+      type:"GET",
+      url : "http://localhost:37551/api/Cities",
+      headers: {"Authorization" : localStorage.getItem('token')},
+      contentType : "application/json",
+        success: (responseData) => {
+            console.log("hata varmı?")
+            $.each(responseData, function(index, value) {
+                citiesElement.append(
+                    `
+                  <tr>  
+                     <td>${value.id}</td>
+                     <td>${value.name}</td>
+                     <td>${value.createDate}</td>
+                  </tr>
+                `
+                )
+            })
+        },
+        error: (error) => { 
+            console.log("hata varmı?")
+            if (error.status == "401") {
+               citiesElement.append("Veriye erişiminiz yok.");
+            }
+        }
+    })
+}
+getCities()
+
+//$(document).ready(
+//function getCities() {
+//  const citiesElement = $("#cities")
+//    $.ajax({
+//      type:"GET",
+//      url : "http://localhost:37551/api/Cities",
+//      headers: {"Authorization" : localStorage.getItem('token')},
+//      contentType : "application/json",
+//        success: (responseData) => {
+//            console.log("hata varmı?")
+//            $.each(responseData, function(index, value) {
+//                citiesElement.append(
+//                    `
+//                  <tr>  
+//                     <td>${value.id}</td>
+//                     <td>${value.name}</td>
+//                     <td>${value.createDate}</td>
+//                  </tr>
+//                `
+//                )
+//            })
+//        },
+//        error: (error) => { 
+//            console.log("hata varmı?")
+//            if (error.status == "401") {
+//               citiesElement.append("Veriye erişiminiz yok.");
+//            }
+//        }
+//    })
+//})
+
+function getExistButton() { 
+     var existToken = window.localStorage.getItem('token')
+    if (!(existToken == null || existToken == "")) {
+        $("#login").append(`<button class="btn btn-danger" onclick="signOut()">Çıkış Yap </button>`);
+    }
+    else {
+        $("#login").append(`<button class="btn btn-primary" onclick="signOut()">Giriş Yap </button>`);
+    }
+}
+getExistButton();
+
+function signOut() { 
+   window.localStorage.removeItem('token')
+   window.location.href = "/Auth/Login"
+}
+   
+</script>
